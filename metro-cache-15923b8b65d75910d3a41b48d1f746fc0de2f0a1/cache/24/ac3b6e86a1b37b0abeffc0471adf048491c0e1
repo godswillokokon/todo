@@ -1,0 +1,367 @@
+__d(function (global, _require, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var _react2 = _require(_dependencyMap[0], "react");
+
+  var _react3 = _interopRequireDefault(_react2);
+
+  var _index = _require(_dependencyMap[1], "./node_modules/react-transform-hmr/lib/index.js");
+
+  var _index2 = _interopRequireDefault(_index);
+
+  var _jsxFileName = "/home/og/Documents/react-native/todo/App.js";
+
+  var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+  var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+  var _reactNative = _require(_dependencyMap[2], "react-native");
+
+  var _header = _require(_dependencyMap[3], "./components/header");
+
+  var _header2 = _interopRequireDefault(_header);
+
+  var _footer = _require(_dependencyMap[4], "./components/footer");
+
+  var _footer2 = _interopRequireDefault(_footer);
+
+  var _row = _require(_dependencyMap[5], "./components/row");
+
+  var _row2 = _interopRequireDefault(_row);
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+  function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+  function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+  function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+  var _components = {
+    App: {
+      displayName: "App"
+    }
+  };
+
+  var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index2.default)({
+    filename: "/home/og/Documents/react-native/todo/App.js",
+    components: _components,
+    locals: [module],
+    imports: [_react3.default]
+  });
+
+  function _wrapComponent(id) {
+    return function (Component) {
+      return _node_modulesReactTransformHmrLibIndexJs2(Component, id);
+    };
+  }
+
+  var filterItems = function filterItems(filter, items) {
+    return items.filter(function (item) {
+      if (filter == "ALL") return true;
+      if (filter == "COMPLETED") return item.complete;
+      if (filter == "ACTIVE") return !item.complete;
+    });
+  };
+
+  var App = _wrapComponent("App")(function (_Component) {
+    _inherits(App, _Component);
+
+    function App(props) {
+      _classCallCheck(this, App);
+
+      var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+
+      var ds = new _reactNative.ListView.DataSource({
+        rowHasChanged: function rowHasChanged(r1, r2) {
+          return r1 != r2;
+        }
+      });
+      _this.state = {
+        loading: true,
+        allComplete: false,
+        filter: "ALL",
+        value: "",
+        items: [],
+        dataSource: ds.cloneWithRows([])
+      };
+      _this.handleUpdateText = _this.handleUpdateText.bind(_this);
+      _this.handleToggleEditing = _this.handleToggleEditing.bind(_this);
+      _this.handleFilter = _this.handleFilter.bind(_this);
+      _this.handleRemoveItem = _this.handleRemoveItem.bind(_this);
+      _this.handleToggleComplete = _this.handleToggleComplete.bind(_this);
+      _this.setSource = _this.setSource.bind(_this);
+      _this.handleAddItem = _this.handleAddItem.bind(_this);
+      _this.handleToggleAllComplete = _this.handleToggleAllComplete.bind(_this);
+      _this.handleClearComplete = _this.handleClearComplete.bind(_this);
+      return _this;
+    }
+
+    _createClass(App, [{
+      key: "componentWillMount",
+      value: function componentWillMount() {
+        var _this2 = this;
+
+        _reactNative.AsyncStorage.getItem("items").then(function (json) {
+          try {
+            var items = JSON.parse(json);
+
+            _this2.setSource(items, items, {
+              loading: false
+            });
+          } catch (error) {
+            _this2.setState({
+              loading: false
+            });
+          }
+        });
+      }
+    }, {
+      key: "handleUpdateText",
+      value: function handleUpdateText(key, text) {
+        var newItems = this.state.items.map(function (item) {
+          if (item.key != key) return item;
+          return _extends({}, item, {
+            text: text
+          });
+        });
+        this.setSource(newItems, filterItems(this.state.filter, newItems));
+      }
+    }, {
+      key: "handleToggleEditing",
+      value: function handleToggleEditing(key, editing) {
+        var newItems = this.state.items.map(function (item) {
+          if (item.key != key) return item;
+          return _extends({}, item, {
+            editing: editing
+          });
+        });
+        this.setSource(newItems, filterItems(this.state.filter, newItems));
+      }
+    }, {
+      key: "setSource",
+      value: function setSource(items, itemsDatasource) {
+        var otherState = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+        this.setState(_extends({
+          items: items,
+          dataSource: this.state.dataSource.cloneWithRows(itemsDatasource)
+        }, otherState));
+
+        _reactNative.AsyncStorage.setItem("items", JSON.stringify(items));
+      }
+    }, {
+      key: "handleClearComplete",
+      value: function handleClearComplete() {
+        var newItems = filterItems("ACTIVE", this.state.items);
+        this.setSource(newItems, filterItems(this.state.filter, newItems));
+      }
+    }, {
+      key: "handleFilter",
+      value: function handleFilter(filter) {
+        this.setSource(this.state.items, filterItems(filter, this.state.items), {
+          filter: filter
+        });
+      }
+    }, {
+      key: "handleRemoveItem",
+      value: function handleRemoveItem(key) {
+        var newItems = this.state.items.filter(function (item) {
+          return item.key != key;
+        });
+        this.setSource(newItems, filterItems(this.state.filter, newItems));
+      }
+    }, {
+      key: "handleToggleComplete",
+      value: function handleToggleComplete(key, complete) {
+        var newItems = this.state.items.map(function (item) {
+          if (item.key != key) return item;
+          return _extends({}, item, {
+            complete: complete
+          });
+        });
+        this.setSource(newItems, filterItems(this.state.filter, newItems));
+      }
+    }, {
+      key: "handleToggleAllComplete",
+      value: function handleToggleAllComplete() {
+        var complete = !this.state.allComplete;
+        var newItems = this.state.items.map(function (item) {
+          return _extends({}, item, {
+            complete: complete
+          });
+        });
+        this.setSource(newItems, filterItems(this.state.filter, newItems), {
+          allComplete: complete
+        });
+      }
+    }, {
+      key: "handleAddItem",
+      value: function handleAddItem() {
+        if (!this.state.value) return;
+        var newItems = [].concat(_toConsumableArray(this.state.items), [{
+          key: Date.now(),
+          text: this.state.value,
+          complete: false
+        }]);
+        this.setSource(newItems, filterItems(this.state.filter, newItems), {
+          value: ""
+        });
+      }
+    }, {
+      key: "render",
+      value: function render() {
+        var _this3 = this;
+
+        return _react3.default.createElement(
+          _reactNative.View,
+          {
+            style: styles.container,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 135
+            }
+          },
+          _react3.default.createElement(_header2.default, {
+            value: this.state.value,
+            onAddItem: this.handleAddItem,
+            onChange: function onChange(value) {
+              return _this3.setState({
+                value: value
+              });
+            },
+            onToggleAllComplete: this.handleToggleAllComplete,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 136
+            }
+          }),
+          _react3.default.createElement(
+            _reactNative.View,
+            {
+              style: styles.content,
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 142
+              }
+            },
+            _react3.default.createElement(_reactNative.ListView, {
+              style: styles.list,
+              enableEmptySections: true,
+              dataSource: this.state.dataSource,
+              onScroll: function onScroll() {
+                return _reactNative.Keyboard.dismiss();
+              },
+              renderRow: function renderRow(_ref) {
+                var key = _ref.key,
+                    value = _objectWithoutProperties(_ref, ["key"]);
+
+                return _react3.default.createElement(_row2.default, _extends({
+                  key: key,
+                  onUpdate: function onUpdate(text) {
+                    return _this3.handleUpdateText(key, text);
+                  },
+                  onToggleEdit: function onToggleEdit(editing) {
+                    return _this3.handleToggleEditing(key, editing);
+                  },
+                  onRemove: function onRemove() {
+                    return _this3.handleRemoveItem(key);
+                  },
+                  onComplete: function onComplete(complete) {
+                    return _this3.handleToggleComplete(key, complete);
+                  }
+                }, value, {
+                  __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 150
+                  }
+                }));
+              },
+              renderSeparator: function renderSeparator(sectionId, rowId) {
+                return _react3.default.createElement(_reactNative.View, {
+                  key: rowId,
+                  style: styles.separator,
+                  __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 161
+                  }
+                });
+              },
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 143
+              }
+            })
+          ),
+          _react3.default.createElement(_footer2.default, {
+            onFilter: this.handleFilter,
+            filter: this.state.filter,
+            onClearComplete: this.handleClearComplete,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 166
+            }
+          }),
+          this.state.loading && _react3.default.createElement(
+            _reactNative.View,
+            {
+              style: styles.loading,
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 172
+              }
+            },
+            _react3.default.createElement(_reactNative.ActivityIndicator, {
+              animating: true,
+              size: "large",
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 173
+              }
+            })
+          )
+        );
+      }
+    }]);
+
+    return App;
+  }(_react2.Component));
+
+  exports.default = App;
+
+  var styles = _reactNative.StyleSheet.create({
+    container: _extends({
+      flex: 1,
+      backgroundColor: "#F5F5F5"
+    }, _reactNative.Platform.select({
+      android: {
+        paddingTop: 30
+      }
+    })),
+    loading: {
+      position: "absolute",
+      left: 0,
+      top: 0,
+      right: 0,
+      bottom: 0,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "rgba(0,0,0,.2)"
+    },
+    content: {
+      flex: 1
+    },
+    list: {
+      backgroundColor: '#FFF'
+    },
+    separator: {
+      borderWidth: 1,
+      borderColor: '#F5F5F5'
+    }
+  });
+});
