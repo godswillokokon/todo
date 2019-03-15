@@ -1,4 +1,4 @@
- import React, { Component } from 'react'
+import React, { Component } from 'react'
 import { 
   Text, 
   View, 
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 24,
     padding: 0,
-    color: "#4d4d4d"
+    color: "#fff"
   },
   textWrap:{
     flex: 1,
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 24,
-    color: "#4d4d4d"
+    color: "#fff"
   }, 
   done: {
     borderRadius: 5,
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     padding: 7
   },
   doneText:{
-    color: "#4d4d4d",
+    color: "#fff",
     fontSize: 20
   }
 
